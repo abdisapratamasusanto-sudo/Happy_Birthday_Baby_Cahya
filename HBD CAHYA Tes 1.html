@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Birthday My Love ❤️</title>
+
+<style>
+:root{
+  --pink:#ff8fb1;
+  --dark:#1a1a2e;
+}
+
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  font-family:'Segoe UI',sans-serif;
+  background:radial-gradient(circle at top,var(--pink),var(--dark));
+  color:#fff;
+  text-align:center;
+  padding:40px 20px;
+  overflow-y: auto
+}
+
+h1{
+  font-size:clamp(2.2rem,5vw,3.2rem);
+  margin-bottom:10px;
+  text-shadow:0 0 20px rgba(255,182,193,.6);
+}
+
+.card{
+  background:rgba(255,255,255,.15);
+  backdrop-filter:blur(10px);
+  padding:30px;
+  border-radius:25px;
+  max-width:650px;
+  margin:40px auto;
+  box-shadow:0 0 30px rgba(255,105,180,.3);
+}
+
+/* BUTTON */
+.button{
+  padding:12px 28px;
+  border-radius:30px;
+  background:#fff;
+  color:var(--pink);
+  font-weight:bold;
+  border:none;
+  cursor:pointer;
+  transition:.3s;
+}
+.button:hover{background:#ffe1ec}
+
+/* SLIDESHOW */
+.slideshow-container{
+  max-width:420px;
+  margin:30px auto;
+}
+.slide{display:none}
+.slide img{
+  width:100%;
+  border-radius:25px;
+  box-shadow:0 10px 25px rgba(0,0,0,.4);
+}
+
+/* TYPING LETTER */
+#letter{
+  font-size:1.1rem;
+  line-height:1.7;
+  white-space:pre-line;
+  min-height:180px;
+}
+
+/* FIREWORKS */
+canvas{
+  position:fixed;
+  inset:0;
+  z-index:-1;
+}
+
+/* HEARTS */
+.heart{
+  position:fixed;
+  bottom:-20px;
+  width:20px;
+  height:20px;
+  background:pink;
+  transform:rotate(45deg);
+  animation:floatUp 5s linear forwards;
+  opacity:.6;
+}
+.heart:before,.heart:after{
+  content:"";
+  position:absolute;
+  width:20px;
+  height:20px;
+  background:pink;
+  border-radius:50%;
+}
+.heart:before{top:-10px}
+.heart:after{left:-10px}
+
+@keyframes floatUp{
+  to{transform:translateY(-800px) rotate(45deg);opacity:0}
+}
+</style>
+</head>
+
+<body>
+
+<canvas id="fireworks"></canvas>
+
+<h1>Happy Birthday, My Love 🎂💖</h1>
+
+<audio id="music" loop>
+  <source src="Paul Partohap - VITAMIN U (Lyric Video) - paul partohap.mp3" type="audio/mpeg">
+</audio>
+
+<button class="button" onclick="toggleMusic()">🎵 Play Music</button>
+
+<!-- SLIDES -->
+<div class="slideshow-container">
+  <div class="slide"><img src="WhatsApp Image 2025-11-06 at 13.03.13_04ff8873.jpg"></div>
+  <div class="slide"><img src="WhatsApp Image 2025-11-10 at 06.20.18_5524438e.jpg"></div>
+  <div class="slide"><img src="WhatsApp Image 2025-11-27 at 13.54.38_6e43209a.jpg"></div>
+</div>
+
+<!-- LETTER -->
+<div class="card">
+  <h2>💌 For You</h2>
+  <div id="letter"></div>
+</div>
+
+<script>
+/* MUSIC */
+let playing=false;
+function toggleMusic(){
+  const m=document.getElementById("music");
+  playing?m.pause():m.play();
+  playing=!playing;
+}
+
+/* SLIDESHOW */
+let i=0;
+const slides=document.querySelectorAll(".slide");
+function showSlides(){
+  slides.forEach(s=>s.style.display="none");
+  i=(i+1)%slides.length;
+  slides[i].style.display="block";
+  setTimeout(showSlides,3000);
+}
+showSlides();
+
+/* TYPING LETTER */
+const text=`Hari ini adalah hari dimana dunia
+menjadi lebih indah… karena kamu lahir 🤍
+
+Terima kasih sudah menjadi
+senyuman favoritku,
+tempat pulangku,
+dan bahagiaku.
+
+Semoga di umur barumu,
+semesta selalu memihakmu,
+dan aku masih bisa
+menemani langkahmu.
+
+Happy birthday,
+I love you more than words 💖`;
+
+let idx=0;
+function typeLetter(){
+  if(idx<text.length){
+    document.getElementById("letter").innerHTML+=text.charAt(idx);
+    idx++;
+    setTimeout(typeLetter,45);
+  }
+}
+typeLetter();
+
+/* HEARTS */
+setInterval(()=>{
+  const h=document.createElement("div");
+  h.className="heart";
+  h.style.left=Math.random()*innerWidth+"px";
+  document.body.appendChild(h);
+  setTimeout(()=>h.remove(),5000);
+},600);
+
+/* FIREWORKS */
+const canvas=document.getElementById("fireworks");
+const ctx=canvas.getContext("2d");
+canvas.width=innerWidth;
+canvas.height=innerHeight;
+
+let fireworks=[];
+function Firework(){
+  this.x=Math.random()*canvas.width;
+  this.y=Math.random()*canvas.height/2;
+  this.r=0;
+}
+function explode(f){
+  for(let i=0;i<40;i++){
+    fireworks.push({
+      x:f.x,y:f.y,
+      vx:(Math.random()-0.5)*4,
+      vy:(Math.random()-0.5)*4,
+      life:60
+    });
+  }
+}
+setInterval(()=>explode(new Firework()),1200);
+
+function animate(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  fireworks.forEach((p,i)=>{
+    p.x+=p.vx; p.y+=p.vy; p.life--;
+    ctx.fillStyle="rgba(255,182,193,.8)";
+    ctx.beginPath();
+    ctx.arc(p.x,p.y,2,0,Math.PI*2);
+    ctx.fill();
+    if(p.life<=0)fireworks.splice(i,1);
+  });
+  requestAnimationFrame(animate);
+}
+animate();
+</script>
+
+</body>
+</html>
